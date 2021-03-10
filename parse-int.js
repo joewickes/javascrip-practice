@@ -14,7 +14,7 @@
 // All tested numbers are valid, you don't need to validate them
 
 function parseInt(string) {
-  console.log(string);
+  console.log('original =>', string);
   const numberCategories = {
     zero: 0,
     one: 1,
@@ -49,38 +49,46 @@ function parseInt(string) {
     million: 1000000,
   }
   
-  if (numberCategories.hasOwnProperty(string)) {
-    return numberCategories[string];
-  } else {
-    const splitString = string.split(' ');
-    let finExp = '';
-    for (let i = 0; i < splitString.length; i++) {
-      if (splitString[i] === 'hundred') {
-        finExp += ' * 100  + ';
-      } else if (splitString[i] === 'thousand') {
-        finExp += ' * 1000  + ';
-      } else if (splitString[i] === 'million') {
-        finExp += ' * 1000000  + ';
-      } else if (splitString[i].includes('-')) {
-        const addNums = splitString[i].split('-');
-        addNums.forEach((num, idx) => {
-          console.log('num', num);
-          if (idx === 0) {
-            finExp += ('+ (' + numberCategories[num]);
-          } else if (idx === 1) {
-            finExp += (' + ' + numberCategories[num] + ')');
-          }
-          
-        })
-      } else if (numberCategories.hasOwnProperty(splitString[i])) {
-        finExp += numberCategories[splitString[i]];
+  const strArr = string.split(' ');
+  console.log(strArr);
+
+  let expStr = '((';
+
+  for (let i = 0; i < strArr.length; i++) {
+
+    if (strArr[i].includes('-')) {
+      console.log(strArr[i]);
+      const dashArr = strArr[i].split('-');
+      for (let j = 0; j < dashArr.length; j++) {
+        if (j === 0) {
+          expStr += ` + (${numberCategories[dashArr[j]]} + `;
+        } else if (j === 1) {
+          expStr += `${numberCategories[dashArr[j]]})`;
+        }
+      }
+    } else if (numberCategories.hasOwnProperty(strArr[i])) {
+      if (strArr[i] === 'hundred' || strArr[i] === 'thousand' || strArr[i] === 'million') {
+        expStr += ` * ${numberCategories[strArr[i]]})`;
+      } else {
+        expStr += ` + ${numberCategories[strArr[i]]}`;
       }
     }
 
-    console.log(finExp);
-    console.log(eval(finExp));
-    return eval(finExp);
+    if (i === strArr.length - 1) {
+      expStr += ')';
+    }
   }
+
+  console.log(expStr, eval(expStr));
 }
 
 parseInt('eight hundred and eighty-nine thousand nine hundred forty-five');
+
+// eight hundred and eighty-nine thousand nine hundred forty-five
+// (8 * 100 + (80 + 9)) * 1000 + 9 * 100 + (40 + 5)
+
+const calculateThing = () => {
+  console.log((8 * 100 + (80 + 9)) * 1000 + 9 * 100 + (40 + 5));
+}
+
+calculateThing();
