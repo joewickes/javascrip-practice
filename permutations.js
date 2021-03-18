@@ -10,17 +10,38 @@
 // The order of the permutations doesn't matter.
 
 function permutations(string) {
-  const strArr = string.split('');
-  
-  strArr.forEach(letter => {
-    const idx = strArr.indexOf(letter);
-    let currentArr = [...strArr];
-    currentArr.splice(idx, 1);
+  const finArr = [string];
 
+  const addToFinArr = (str) => {
+    if (!finArr.includes(str)) {
+      finArr.push(str);
+    }
+  }
+  
+  let index = 0;
+
+  while (index !== finArr.length) {
+    const strArr = finArr[index].split('');
     
-  })
+    strArr.forEach(letter => {
+      const idx = strArr.indexOf(letter);
+      let currentArr = [...strArr];
+      let currentStr = currentArr.splice(idx, 1);
+      currentStr = currentArr.join('');
+  
+      for (let i = -1; i < strArr.length - 1; i++) {
+        const front = currentStr.slice(0, i + 1);
+        const back = currentStr.slice(i + 1);
+        const finStr = front + letter + back;
+        addToFinArr(finStr);
+      }
+    });
+
+    index++;
+  }
+  return finArr;
 }
 
-permutations('asdf')
+permutations('aabb')
 
 // 
