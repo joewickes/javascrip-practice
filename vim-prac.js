@@ -7,3 +7,8 @@ const vi = () => {
 // Test out vim controls for adding auto parentheses () {} [] and quotes "" '';
 
 vi();
+
+// Test out color theme
+const something = () => {
+  console.log('Color');
+}
